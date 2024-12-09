@@ -4,14 +4,14 @@ import { Route, Switch } from 'react-router-dom'
 
 import Login from './pages/Login'
 import ProtectRoutes from './toolkit/ProtectRoutes'
-import DataUserForm from './pages/DataUserForm'
+import DataUserForm from './pages/DataUserForm' 
+import './index.css'
 
 const App = () => {
   return (
     <Switch>
       <Route path="/login" component={Login} />
-      
-      {/* Para las rutas protegidas, usamos un Route con render */}
+    
       <Route
         path="/"
         render={() => (

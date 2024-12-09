@@ -9,21 +9,21 @@ const ProtectRoutes = ({ children, ...rest }) => {
   // Simula la validación del usuario (puedes reemplazar esta lógica con una API real)
   useEffect(() => {
 
-    // const simulateAuthCheck = async () => {
-    //   setIsLoading(true);
-    //   try {
+    const simulateAuthCheck = async () => {
+      setIsLoading(true);
+      try {
       
-    //     await new Promise((resolve) => setTimeout(resolve, 2000));
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
 
        
-    //     const userIsAuthenticated = false; 
-    //     setIsAuthenticated(userIsAuthenticated);
-    //   } catch (error) {
-    //     console.error('Error durante la validación:', error);
-    //   } finally {
-    //     setIsLoading(false); // Termina el estado de carga
-    //   }
-    // };
+        const userIsAuthenticated = true; 
+        setIsAuthenticated(userIsAuthenticated);
+      } catch (error) {
+        console.error('Error durante la validación:', error);
+      } finally {
+        setIsLoading(false); // Termina el estado de carga
+      }
+    };
 
     simulateAuthCheck();
   }, []);
