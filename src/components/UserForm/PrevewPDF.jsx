@@ -17,8 +17,8 @@ const PrevewPDF = ({ pdfUrl }) => {
       if (pdfUrl) {
          setPdf(pdfUrl);
       }
-      console.log("holaaa")
-   }, [pdfUrl,stateModal]);
+    
+   }, [pdfUrl, stateModal]);
 
    const onDocumentLoadSuccess = ({ numPages }) => {
       setNumPages(numPages);
@@ -45,7 +45,6 @@ const PrevewPDF = ({ pdfUrl }) => {
                   </Document>
                </Modal>
 
-
                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess} onLoadError={onDocumentLoadError} className="pdf-document mx-auto">
                   <Page pageNumber={currentPage} className="pdf-page" />
                </Document>
@@ -60,7 +59,7 @@ const PrevewPDF = ({ pdfUrl }) => {
                      <button onClick={goToNextPage} disabled={currentPage >= numPages}>
                         <img src={arrow} className="w-4  ml-2" alt="" />
                      </button>
-                     <button onClick={()=>setStateModal(!stateModal)} >
+                     <button onClick={() => setStateModal(!stateModal)}>
                         <img src={zoom} className="w-4  ml-2 cursor-pointer" alt="" />
                      </button>
                   </span>

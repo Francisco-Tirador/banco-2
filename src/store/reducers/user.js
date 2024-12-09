@@ -1,6 +1,5 @@
 const initialState = { 
     usuario: "",
-    password: ""
 };
 
 const userSlice = (state = initialState, action) => {

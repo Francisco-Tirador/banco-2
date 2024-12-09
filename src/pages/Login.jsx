@@ -2,63 +2,59 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Countdown from "react-countdown";
 import Footer from "../components/Footer";
-import "../index.css";
+import { useHistory } from "react-router-dom";
 
 //* ASSETS
 import logo from "../assets/images/logo-banco-azteca-letras.jpeg";
 import fondo from "../assets/images/fondo.jpg";
 import axios from "axios";
-import { dispatch } from "../store";
+
+import { useDispatch } from "react-redux";
 
 const Login = () => {
    const { register, handleSubmit, errors, reset } = useForm();
    const [intentos, setIntentos] = useState(0);
    const [stateAlert, setStateAlert] = useState(false);
-   const timer = 15000; 
+   const timer = 15000;
 
+   const history = useHistory();
+
+   const dispatch = useDispatch();
 
    const onSubmit = (data) => {
+      axios
+         .post("http://localhost:2157/banco/auth", data)
+         .then((res) => {
+            console.log("Inicio de sesión exitoso");
+            dispatch({ type: "login", payload: { usuario: "Azteca", password: "1234" } });
+            history.push("/");
+         })
+         .catch((err) => {
+            const nuevosIntentos = intentos + 1;
+            setIntentos(nuevosIntentos);
+            setStateAlert(true);
 
+            if (nuevosIntentos >= 3) {
+               setTimeout(() => {
+                  setIntentos(0);
+                  reset();
+               }, timer);
+            }
 
-      axios.post("http://localhost:2157/banco/auth",data)
-        .then(res=>{
-          console.log(res)
-          console.log("Inicio de sesión exitoso", data);
-          dispatch({ type: "login", payload: { usuario: "Azteca", password: "1234" } })
-          // window.location.href = "/";
-        })
-        .catch(err=>{
-         
-
-         const nuevosIntentos = intentos + 1;
-         setIntentos(nuevosIntentos);
-         setStateAlert(true);
-      
-         if (nuevosIntentos >= 3) {
-            setTimeout(() => {
-               setIntentos(0);
-               reset(); 
-            }, timer);
-         }
-
-
-         setTimeout(() => setStateAlert(false), 3000);
-         if (intentos >= 2) {
-          console.log("Límite de intentos alcanzado");
-          return;
-       }
-        })
-
+            setTimeout(() => setStateAlert(false), 3000);
+            if (intentos >= 2) {
+               console.log("Límite de intentos alcanzado");
+               return;
+            }
+         });
    };
 
    return (
       <div className="bg-primary w-full min-h-[100vh] flex justify-center items-center flex-wrap">
-         
-         <img src={fondo} className="absolute w-[80%] my-auto h-full left-0 top-0 degradado" alt="" />
-         
-         <form onSubmit={handleSubmit(onSubmit)} className="relative max-w-sm ml-auto mr-[15%] mt-auto flex flex-wrap  bg-white w-[80%] min-h-[400px] duration-300 rounded-md p-[30px]">
-            
-            <img src={logo} className="w-44 h-6 mx-auto my-4" alt="Banco Azteca" />
+         <img src={fondo} className="absolute w-[80%] my-auto h-full left-0 top-0 degradado md:opacity-100 opacity-0" alt="" />
+
+         <form onSubmit={handleSubmit(onSubmit)} className="relative max-w-sm ml-auto mx-auto md:mr-[15%] mt-auto flex flex-wrap  bg-white w-[80%] min-h-[400px] duration-300 rounded-md p-[30px]">
+            <img src={logo} className="w-44 h-6 mx-auto my-4 " alt="Banco Azteca" />
 
             <div className={`bg-red-400 text-red-100 overflow-hidden w-full ${stateAlert ? "p-1 h-14 " : "h-0 p-0"} rounded-md text-center z-10 duration-300`}>
                Las credenciales son incorrectas <br />
@@ -88,7 +84,6 @@ const Login = () => {
                      <Countdown date={Date.now() + timer} />
                   </div>
                )}
-
             </div>
 
             <button type="submit" disabled={intentos >= 3} className={`${intentos >= 3 ? "bg-gray-500 cursor-not-allowed" : "bg-primary hover:bg-secondary"} text-white  focus:outline-none mx-auto font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1 h-10 text-center`}>

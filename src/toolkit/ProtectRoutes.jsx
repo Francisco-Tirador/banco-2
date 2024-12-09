@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { Route, Switch,Redirect } from 'react-router-dom'
+import loanding from '../assets/icons/loading.png'
 
 
 const ProtectRoutes = ({ children, ...rest }) => {
-  const [isLoading, setIsLoading] = useState(true); // Estado para la simulación de carga
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const User=useSelector((slice)=>slice.usuario)
 
-  // Simula la validación del usuario (puedes reemplazar esta lógica con una API real)
   useEffect(() => {
-
+    console.log(User)
     const simulateAuthCheck = async () => {
-      setIsLoading(true);
+      setIsLoading(true); 
       try {
       
-        // await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
        
-        const userIsAuthenticated = true; 
+        const userIsAuthenticated = User?true:false; 
+      
         setIsAuthenticated(userIsAuthenticated);
       } catch (error) {
         console.error('Error durante la validación:', error);
       } finally {
-        setIsLoading(false); // Termina el estado de carga
+        setIsLoading(false); 
       }
     };
 
@@ -29,7 +32,9 @@ const ProtectRoutes = ({ children, ...rest }) => {
   }, []);
 
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return <div className='w-full h-[100vh] flex justify-center items-center'>
+        <img src={loanding} className='animate-spin' alt="spinner carga" />
+    </div>;
   }
 
   return (
@@ -38,7 +43,7 @@ const ProtectRoutes = ({ children, ...rest }) => {
       render={({ location }) =>
         isAuthenticated ? (
           children
-        ) : (
+        ) : ( 
           <Redirect to={{ pathname: '/login', state: { from: location } }} />
         )
       }
