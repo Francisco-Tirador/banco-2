@@ -8,12 +8,14 @@ import "../index.css";
 import logo from "../assets/images/logo-banco-azteca-letras.jpeg";
 import fondo from "../assets/images/fondo.jpg";
 import axios from "axios";
+import { dispatch } from "../store";
 
 const Login = () => {
-   const { register, handleSubmit, watch, errors, reset } = useForm();
+   const { register, handleSubmit, errors, reset } = useForm();
    const [intentos, setIntentos] = useState(0);
    const [stateAlert, setStateAlert] = useState(false);
    const timer = 15000; 
+
 
    const onSubmit = (data) => {
 
@@ -22,6 +24,7 @@ const Login = () => {
         .then(res=>{
           console.log(res)
           console.log("Inicio de sesión exitoso", data);
+          dispatch({ type: "login", payload: { usuario: "Azteca", password: "1234" } })
           // window.location.href = "/";
         })
         .catch(err=>{
@@ -85,6 +88,7 @@ const Login = () => {
                      <Countdown date={Date.now() + timer} />
                   </div>
                )}
+
             </div>
 
             <button type="submit" disabled={intentos >= 3} className={`${intentos >= 3 ? "bg-gray-500 cursor-not-allowed" : "bg-primary hover:bg-secondary"} text-white  focus:outline-none mx-auto font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1 h-10 text-center`}>
